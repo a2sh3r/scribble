@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Extralight.otf") format("opentype");
+  font-weight: 200; /* Extralight */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Light.otf") format("opentype");
+  font-weight: 300; /* Light */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Medium.otf") format("opentype");
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("./assets/font/ClashDisplay-Semibold.otf") format("opentype");
+  font-weight: 600; /* Semibold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "InterTight";
+  src: url("./assets/font/InterTight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.bg-img-funnel {
+  background-image: url("./assets/img/funnel.svg");
+  background-position: left;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.bg-img-ball {
+  background-image: url("./assets/img/ball.svg");
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+/* Скрыть значок календаря в Chrome, Safari и Edge */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Скрыть значок календаря в Firefox */
+input[type="date"] {
+  -moz-appearance: textfield;
+}

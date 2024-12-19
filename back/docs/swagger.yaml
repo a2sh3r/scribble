@@ -1,0 +1,285 @@
+basePath: /api/v1
+definitions:
+  model.CodeRequest:
+    properties:
+      code:
+        type: string
+    type: object
+  model.EmailPasswordRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  model.EmailRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  model.PasswordRequest:
+    properties:
+      password:
+        type: string
+    type: object
+  model.Response:
+    properties:
+      message:
+        description: Описание ответа
+        type: string
+      status:
+        description: Статус ответа
+        type: boolean
+    type: object
+  model.RoleResponse:
+    properties:
+      message:
+        description: Описание ответа
+        type: string
+      name:
+        description: Имя пользователя
+        type: string
+      role:
+        description: Роль пользователя
+        type: string
+      status:
+        description: Статус ответа
+        type: boolean
+    type: object
+info:
+  contact: {}
+  description: API для управления данными и взаимодействия через HTTP-эндпоинты.
+  title: Prosto Matika API
+  version: "1.0"
+paths:
+  /auth/jwt:
+    post:
+      consumes:
+      - application/json
+      description: Проверяет валидность JWT токена и выполняет вход пользователя
+      parameters:
+      - description: 'JWT токен в формате: Bearer <token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Вход выполнен успешно
+          schema:
+            $ref: '#/definitions/model.RoleResponse'
+        "401":
+          description: Недействительный токен
+          schema:
+            $ref: '#/definitions/model.Response'
+      security:
+      - Bearer: []
+      summary: Вход по JWT токену
+      tags:
+      - login
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на вход пользователя. При успешной аутентификации
+        JWT токен будет отправлен в httpOnly cookie и автоматически использоваться
+        в последующих запросах.
+      parameters:
+      - description: Запрос на вход
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmailPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Вход выполнен, токен охранен в cookie
+          schema:
+            $ref: '#/definitions/model.RoleResponse'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Вход пользователя
+      tags:
+      - login
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Удаляет токен авторизации из cookie и завершает сессию пользователя
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Выход выполнен успешно
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Ошибка при выходе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Выход пользователя
+      tags:
+      - auth
+  /password/new:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на установку нового пароля
+      parameters:
+      - description: Запрос на установку нового пароля
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Новый пароль установлен
+          schema:
+            $ref: '#/definitions/model.RoleResponse'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Установка нового пароля
+      tags:
+      - password
+  /password/reset/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на подтверждение сброса пароля
+      parameters:
+      - description: Запрос на подтверждение сброса пароля
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сброс пароля подтвержден
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Подтверждение сброса пароля
+      tags:
+      - password
+  /password/reset/start:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на начало сброса пароля
+      parameters:
+      - description: Запрос на начало сброса пароля
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmailPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сброс пароля начат
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Начало сброса пароля
+      tags:
+      - password
+  /registration/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на подтверждение регистрации пользователя
+      parameters:
+      - description: Запрос на подтверждение регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Регистрация подтверждена
+          schema:
+            $ref: '#/definitions/model.RoleResponse'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Подтверждение регистрации
+      tags:
+      - registration
+  /registration/start:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на начало регистрации пользователя
+      parameters:
+      - description: Запрос на начало регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmailPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Регистрация начата
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Начало регистрации
+      tags:
+      - registration
+  /registration/validate-email:
+    post:
+      consumes:
+      - application/json
+      description: Обрабатывает запрос на проверку доступности email для регистрации
+      parameters:
+      - description: Запрос на проверку доступности email для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email доступен для регистрации
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Email недоступен для регистрации
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Проверка доступности email для регистрации
+      tags:
+      - registration
+swagger: "2.0"
